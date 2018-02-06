@@ -1,0 +1,188 @@
+Sequences
+---------
+(defn Example []
+   (def seq1 (seq [5 4 3 2 1]))
+   (println (split-at 2 seq1)))
+(Example)
+
+1. Lazy sequence
+
+(defn square[x]
+  (* x x))
+(square (rand-int 10))
+
+------------------------------
+(defmacro square[x]
+  (list '* x x))
+-----------------------------------
+macroexpand '(square 10))
+
+-----------------------------
+Regular Expression
+------------------
+1. re-matches
+(re-matches #"abc(.*)" "zzzabcxxx")
+
+2. re-find
+(re-find #"sss" "Loch Ness") ;;nil 
+(re-find #"s+" "dressing") ;; 
+(re-seq #"s+" "mississippi") ;;
+
+3. replace
+(clojure.string/replace "mississippi" #"i.." "obb") ;;
+
+4. split
+(clojure.string/split "This is a string that I am splitting." #"\s+")
+
+Reduce
+-------
+1. (reduce + 0 [1 2 3])
+
+gen-class
+-----------
+(ns clojure.examples.Samp
+    (:gen-class)
+	(:require clojure.set as set)
+	(:use )
+	(:method "-main"))
+
+(defn -main
+  [args]
+  (println (str "Hello " args "!")))
+(compile 'clojure.examples.samp)
+java -cp ./classes:clojure.jar clojure.examples.samp Sri
+
+leiningen
+
+
+(ns some.Example
+  (:gen-class
+     :methods [[show [] void]
+               [showMessage [String] void]]))
+
+(defn -show
+  [this]
+  (println "Hello, World!"))
+
+(defn -showMessage
+  [this msg]
+  (println msg))
+
+(.show (some.Example.))
+--------------------------------------
+
+How to use java classes in clojure
+-----------------------------------
+(defn Example []
+   (def date 
+	(.format (java.text.SimpleDateFormat. "MM/dd/yyyy") 
+	(new java.util.Date)))
+   (println date))
+(Example)
+--------------------------------------------------------
+
+
+I/O
+-----
+(ns clojure.examples.hello
+   (:gen-class))
+
+(defn Example []
+   (def string1 (slurp "Example.txt"))
+   (println string1))
+(Example)
+
+slurp --> reading 
+spit --> writing
+
+-----------
+(ns clojure.examples.hello
+   (:gen-class))
+
+
+(defn Example []
+   (with-open [rdr (clojure.java.io/reader "Example.txt")]
+   (reduce conj [] (line-seq rdr))))
+(Example)
+
+
+
+(defn Example []
+   (with-open [w (clojure.java.io/writer "Example.txt" :append true)]
+      (.write w (str "hello" "world"))))
+(Example)
+
+--------------------------------------------------------------
+Exceptions
+------------
+(defn Example []
+   (try
+      (println (aget (int-array [1 2 3]) 20)) 
+      (catch ArrayIndexOutOfBoundsException e (println (str "caught exception: " (.toString e))))
+      (catch Exception e (println (str "caught exception: " (.getMessage e))))
+      (finally (println "This is our final block")))
+   (println "Code after try"))
+(Example)
+
+
+
+----------------------------------------
+[net.mikera/core.matrix "0.61.0"]
+
+(defn matrixApp
+  	[]
+	(array (range 5))
+	(println (mmul [[1 2][1 2]]
+                 [[1 2][1 2]]))
+	(shape [[1 2][1 2]]
+               [[1 2][1 2]])
+	(dimensionality [1 2 3 4 5])
+	(array? [1 2 3])
+	(scalar? [1 2 3])
+)
+  
+(matrixApp)
+---------------------------------
+(ns wsw.core (:use clojure.core.matrix
+                   clojure.core.matrix.operators))
+(defn matrixApp[]
+  (def arr [[1 2 3][4 5 6]])
+  (mget arr 1 2)
+  (+ [1 2 3] [4 5 6])
+  (permutation-matrix [1 2 3 0])
+  )
+(matrixApp)
+--------------------------------------
+(def pi 3.14159)
+   (def tau (* 2.0 pi))
+   (defn rot [turns]
+   	(let [a (* tau turns)]
+   	[[(cos a) (sin a)][(-(sin a)) (cos a)]]))
+   (mmul (rot 1/8) [3 4])
+-------------------------------------------------
+(ns wsw.core (:use clojure.core.matrix
+                   clojure.core.matrix.operators))
+
+(def arr [1 2 3 4])
+(defn findSum [[] aValues]
+	(mean aValues))
+(findSum arr)
+
+---------------------------------------------
+(ns wsw.core (:use clojure.core.matrix
+                   clojure.core.matrix.operators))
+
+(def arr [1 2 3 4])
+(defn findSum [aValues]
+	(sd aValues))
+(findSum arr)
+----------------------------------------------
+(ns wsw.core (:use clojure.core.matrix
+                   clojure.core.matrix.operators))
+
+(def arr [1 2 3 4])
+(defn findSum [aValues]
+	(variance aValues))
+(findSum arr)
+	
+
